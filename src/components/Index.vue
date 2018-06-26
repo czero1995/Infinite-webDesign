@@ -1,7 +1,7 @@
 <template>
 
 	<div class="page recommend">
-    <div class="top_tab">无极</div>
+    <div class="top_tab">Infinite</div>
 			<div class="container wrapper" ref="wrapper">
 				<div class="content" ref="content">
 				<div class="pull_down">{{pullDownText}}</div>
@@ -240,6 +240,7 @@ export default {
   z-index: 1;
   left: 0;
   right:0;
+  font-size: .36rem;
 }
 .recommend {
   background: #efefef;
