@@ -11,17 +11,18 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api': {//这里是我配置的名字
-  　　　　target: 'http://127.0.0.1:3000/', //这个路径是我代理到本地tp框架里面
-  　　　　changeOrigin: true, //开启代理
-    　　　pathRewrite: { '^/api': '/api' }  //这里重写路径/run就代理到对应地址
+      '/api': {
+//   　　　　target: 'http://127.0.0.1:3000/', 
+  　　　　target: 'http://47.98.240.154:3000/', 
+  　　　　changeOrigin: true,
+    　　　pathRewrite: { '^/api': '/api' }  
         
         } 
     },
 
     // Various Dev Server settings
-    host: '0.0.0.0', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    host: '127.0.0.1', // can be overwritten by process.env.HOST
+    port: 4000, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

@@ -16,7 +16,7 @@
 		},
 		methods: {
 			onBack() {
-					this.$router.push('./member');
+					this.$router.go(-1)
 
 			}
 		}
@@ -45,6 +45,5 @@
 	p {
 		text-align: center;
 		width: 100%;
-		margin-right: .6rem;
 	}
 </style>

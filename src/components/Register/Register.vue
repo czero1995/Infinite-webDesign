@@ -18,9 +18,9 @@
             </div>
             <div class="login_item flex">
                 <span>确认密码:</span>
-                <input type="text" placeholder="输入密码" v-model="rePasswd">
+                <input type="text" placeholder="输入确定密码" v-model="rePasswd">
             </div>
-            <div class="login_btn">
+            <div class="login_btn" @click="onRegister">
                 注册
             </div>
             <div class="noacount" @click="toLogin">
@@ -32,10 +32,11 @@
 
 <script>
 import Headersec from '../base/HeaderSec.vue';
+import * as common from '../../mixins/common.js'
 export default {
     data() {
         return {
-            phoneNumber: 0,
+            phoneNumber: '',
             nickName: '',
             passwd: '',
             rePasswd: '',
@@ -45,19 +46,6 @@ export default {
         Headersec,
     },
     mounted() {
-        // this.$toastBox.showToastBox({
-        //         toast: 'wo shi toast ',
-        //     })
-        //     this.$modelBox.onModelBox({
-        //         title: '提示',
-        //         content: '提示内容',
-        //     }).then(async (val) => {
-        //         // ...  
-        //         // alert('你点击了确定')
-        //     }).catch(() => {
-        //         // ...
-        //         // alert('你点击了取消')
-        //     });
     },
     methods: {
         toLogin() {
@@ -67,28 +55,42 @@ export default {
         },
         onRegister() {
             if (this.nickName == '') {
-
+                this.$toastBox.showToastBox({
+                    toast: '请输入正确手机号码',
+                })
+            } else if (!common.phoneReg.test(this.phoneNumber)) {
+                this.$toastBox.showToastBox({
+                    toast: '请输入用户名',
+                })
+            } else if (this.passwd == '') {
+                this.$toastBox.showToastBox({
+                    toast: '请输入密码',
+                })
+            } else if (this.passwd != this.rePasswd) {
+                this.$toastBox.showToastBox({
+                    toast: '两次输入密码不一致',
+                })
             } else {
-
                 this.$http
-                    .post(`http://127.0.0.1:3000/api/signup`, {
+                    .post(`api/signup`, {
                         phoneNumber: this.phoneNumber,
-                        nickname: this.nickName,
+                        nickName: this.nickName,
+                        passwd: this.passwd,
                     })
                     .then(res => {
                         console.log(res)
                         if (res.data.data.success) {
                             this.$toastBox.showToastBox({
-                                toast: '注册成功',
+                                toast: '注册成功,请登陆',
                             })
                             setTimeout(() => {
                                 this.$router.replace({
-                                    path: './index'
+                                    path: './login'
                                 })
                             }, 2000)
                         } else {
                             this.$toastBox.showToastBox({
-                                toast: '登录失败,请重试!',
+                                toast: res.data.data,
                             })
                         }
                     })

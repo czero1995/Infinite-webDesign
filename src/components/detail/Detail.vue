@@ -41,7 +41,7 @@ export default {
         this.getData()
     },
     methods: {
-        onCollect(){
+        onCollect() {
             console.log('aaa')
             this.dataList.collect = true
         },
@@ -50,8 +50,9 @@ export default {
             this.$http
                 .get(`api/recommend/detail?id=${this.$route.query.id}`)
                 .then(res => {
-                    this.dataList = res.data.data;
-                    console.log(111, typeof this.dataList);
+                    console.log('res', res.data.data)
+                    this.dataList = res.data.data.content;
+                    console.log(111, this.dataList);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -104,7 +105,7 @@ export default {
   right: 0.3rem;
   bottom: 1rem;
 }
-.iscollect{
-    color:@theme_background;
+.iscollect {
+  color: @theme_background;
 }
 </style>

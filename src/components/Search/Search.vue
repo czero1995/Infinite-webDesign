@@ -5,27 +5,34 @@
             <div class="search_box flex">
                 <span class="iconfont back_icon" @click="onBack">&#xe749;</span>
                 <input type="text" placeholder="搜索关键词" v-model="searchText">
-                <span class="iconfont back_icon" @click="onSearch">&#xe749;</span>
+                <span class="iconfont search_icon" @click="onSearch">&#xe600;</span>
             </div>
         </header>
-        <div class="content">
-            <div>搜索记录:</div>
-            <div class="search_item" v-for="item in 10">aaaa</div>
+        <div class="content" v-if="$store.state.history.length != 0">
+            <div>搜索记录:{{$store.state.history.length}}</div>
+            <div class="search_item flex_between" v-for="(item,index) in $store.state.history" :key="index" @click="onHistorySearch(index)">
+                <span>{{item}}}</span>
+                <span @click.stop="onDeleteHistory(item)">X</span>
+            </div>
         </div>
     </div>
 
 </template>
 
 <script>
-
+import { mapGetters, mapMutations } from 'vuex';
 export default {
     data() {
         return {
-            searchText:''
+            searchText: ''
         }
 
     },
-
+    computed: {
+        ...mapGetters([
+            'this.$store.state.history',
+        ])
+    },
 
     mounted() {
     },
@@ -34,13 +41,29 @@ export default {
             this.$router.back();
         },
         onSearch() {
+            this.setHistory(this.searchText)
             this.$router.push({
                 path: './searchbox',
-                query:{
-                    text:this.searchText
+                query: {
+                    text: this.searchText
                 }
             })
-        }
+        },
+        onHistorySearch(item) {
+            this.$router.push({
+                path: './searchbox',
+                query: {
+                    text: item
+                }
+            })
+        },
+        onDeleteHistory(item) {
+            let index = this.$store.state.history.indexOf(item);
+            this.$store.state.history.splice(index, 1);
+        },
+        ...mapMutations({
+            setHistory: 'SET_HISTORY'
+        })
     }
 
 }
@@ -49,22 +72,29 @@ export default {
 <style lang="less" scoped>
 @import '../../../static/less/variable.less';
 .content {
-  padding-top: 1rem;
+  padding: 0.1rem;
+  padding-top: 5rem;
+  font-size: 0.26rem;
 }
 .search_box {
   width: 100vw;
-  input {
-    padding-left: 0.3rem;
-    font-size: 0.28rem;
-    flex: 1;
-  }
-  input:focus {
-    outline: none;
-  }
+}
+input {
+  height: 0.8rem;
 }
 .back_icon {
   font-size: 0.42rem;
   color: #ccc;
   width: 0.3rem;
+}
+.search_icon {
+  font-size: 0.42rem;
+  color: #ccc;
+  padding-right: 0.2rem;
+}
+.search_item {
+  font-size: 0.28rem;
+  border-bottom: 1px solid #ccc;
+  padding: 0.2rem;
 }
 </style>

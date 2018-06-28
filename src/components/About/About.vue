@@ -1,12 +1,12 @@
 <template>
 
     <div class="page">
-        <headersec tabname="搜索详情"></headersec>
+        <headersec tabname="关于我们"></headersec>
         <div class="container" v-if="dataList.length != 0">
             <div class="list_box">
                 <div class="list_item flex" v-for="(item,index) in dataList" :key='index' @click="toDetail(item._id)">
                     <div class="item_title">{{item.title}}</div>
-                    <img class="item_post" v-lazy="item.post">
+                    <img class="item_post" :src="item.post">
                 </div>
             </div>
         </div>
@@ -31,21 +31,11 @@ export default {
     },
 
     mounted() {
-        this.getData()
+
     },
 
     methods: {
-        getData() {
-            this.$http
-                .get(`api/recommend/search`)
-                .then(res => {
-                    // this.dataList = [...this.dataList, ...res.data.data];
-                    console.log(res);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
+
         toDetail(id) {
             this.$router.push({
                 path: `/detail`,

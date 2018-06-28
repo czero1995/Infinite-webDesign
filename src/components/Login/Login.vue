@@ -15,7 +15,7 @@
             <router-link class="forget_passwd" tag="div" to="./forgetpasswd">
                 忘记密码
             </router-link>
-            <div class="login_btn">
+            <div class="login_btn" @click="onLogin">
                 登录
             </div>
             <router-link class="noacount" tag="div" to="./register">
@@ -27,6 +27,7 @@
 
 <script>
 import Headersec from '../base/HeaderSec.vue';
+import * as common from '../../mixins/common.js'
 export default {
     data() {
         return {
@@ -42,15 +43,18 @@ export default {
     },
     methods: {
         onLogin() {
-            var phoneReg = /(1[3-9]\d{9}$)/;
-            if (!phoneReg.test(this.phoneNumber)) {
+            if (!common.phoneReg.test(this.phoneNumber)) {
                 this.$toastBox.showToastBox({
                     toast: '请输入正确手机号码',
                 })
-            } else {
-
+            } else if (this.passwd == '') {
+                this.$toastBox.showToastBox({
+                    toast: '请输入密码',
+                })
+            }
+            else {
                 this.$http
-                    .post(`http://127.0.0.1:3000/api/user/login`, {
+                    .post(`api/user/login`, {
                         phoneNumber: this.phoneNumber,
                         passwd: this.passwd,
                     })
@@ -67,7 +71,7 @@ export default {
                             }, 2000)
                         } else {
                             this.$toastBox.showToastBox({
-                                toast: '登录失败,请重试!',
+                                toast: res.data.data,
                             })
                         }
                     })
@@ -119,5 +123,9 @@ export default {
   color: #666;
   margin: auto;
   font-size: 0.24rem;
+}
+.forget_passwd {
+  text-align: right;
+  font-size: 0.26rem;
 }
 </style>

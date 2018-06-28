@@ -12,7 +12,7 @@
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide" v-for="(bannerItem,index) in bannerList" :key="index">
-                            <img :src="bannerItem.post" />
+                            <img v-lazy="bannerItem.post" />
                         </div>
                     </div>
                     <div class="swiper-pagination"></div>

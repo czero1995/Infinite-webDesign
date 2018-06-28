@@ -5,12 +5,8 @@
         <div class="container">
 
             <div class="login_item flex">
-                <span>用户名:</span>
-                <input type="text" placeholder="输入用户名" v-model="phoneNumber">
-            </div>
-            <div class="login_item flex">
                 <span>手机号:</span>
-                <input type="text" placeholder="输入用户名" v-model="nickName">
+                <input type="text" placeholder="输入用户名" v-model="phoneNumber">
             </div>
             <div class="login_item flex">
                 <span>密码:</span>
@@ -18,25 +14,27 @@
             </div>
             <div class="login_item flex">
                 <span>确认密码:</span>
-                <input type="text" placeholder="输入密码" v-model="rePasswd">
+                <input type="text" placeholder="输入确认密码" v-model="rePasswd">
             </div>
-            <div class="login_btn">
+            <div class="login_btn" @click="onUpdate">
                 确认
             </div>
-            <router-link class="noacount" tag="div" to="./register">
+            <div class="noacount" @click="onBack">
                 没有账号?前往注册!
-            </router-link>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import Headersec from '../base/HeaderSec.vue';
+import * as common from '../../mixins/common.js'
 export default {
     data() {
         return {
-            phoneNumber:'',
-            passwd:'',
+            phoneNumber: '',
+            passwd: '',
+            rePasswd: ''
         }
     },
     components: {
@@ -46,40 +44,47 @@ export default {
 
     },
     methods: {
-        onLogin(){
-            var phoneReg = /(1[3-9]\d{9}$)/;
-            if(!phoneReg.test(this.phoneNumber)){
+        onUpdate() {
+            if (!common.phoneReg.test(this.phoneNumber)) {
                 this.$toastBox.showToastBox({
                     toast: '请输入正确手机号码',
                 })
-            }else{
-        
+            } else if (this.passwd == '') {
+                this.$toastBox.showToastBox({
+                    toast: '请输入密码',
+                })
+            } else if (this.passwd != this.rePasswd) {
+                this.$toastBox.showToastBox({
+                    toast: '两次输入密码不一致',
+                })
+            } else {
                 this.$http
-                        .post(`http://127.0.0.1:3000/api/user/login`,{
-                            phoneNumber:this.phoneNumber,
-                            passwd:this.passwd,
+                    .post(`api/update`, {
+                        phoneNumber: this.phoneNumber,
+                        passwd: this.passwd,
+                    })
+                    .then(res => {
+                        console.log(res)
+                        if (res.data.data.success) {
+                            this.$toastBox.showToastBox({
+                                toast: '修改成功',
                             })
-                            .then(res => {
-                                console.log(res)
-                                if(res.data.data.success){
-                                    this.$toastBox.showToastBox({
-                                        toast: '登录成功',
-                                    })
-                                setTimeout(()=>{
-                                    this.$router.replace({
-                                        path:'./member'
-                                    })
-                                },2000)
-                                }else{
-                                    this.$toastBox.showToastBox({
-                                        toast: '登录失败,请重试!',
-                                    })
-                                }
+                            setTimeout(() => {
+                                this.onBack()
+                            }, 2000)
+                        } else {
+                            this.$toastBox.showToastBox({
+                                toast: '用户不存在!',
                             })
-                            .catch(function(error) {
-                            console.log(error);
-                        });
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
+        },
+        onBack() {
+            this.$router.go(-1)
         }
     }
 }
