@@ -48,7 +48,7 @@ export default {
 
         getData() {
             this.$http
-                .get(`http://127.0.0.1:3000/api/recommend/detail?id=${this.$route.query.id}`)
+                .get(`api/recommend/detail?id=${this.$route.query.id}`)
                 .then(res => {
                     this.dataList = res.data.data;
                     console.log(111, typeof this.dataList);

@@ -91,7 +91,7 @@ export default {
         },
         getData() {
             this.$http
-                .get(`http://127.0.0.1:3000/api/hot/all`)
+                .get(`api/hot/all`)
                 .then(res => {
                     this.dataList = res.data.data
                     console.log(this.dataList);
@@ -102,7 +102,7 @@ export default {
         },
         getBanner() {
             this.$http
-                .get(`http://127.0.0.1:3000/api/hot/banner`)
+                .get(`api/hot/banner`)
                 .then(res => {
                     this.bannerList = res.data.data
                     console.log(this.bannerList);

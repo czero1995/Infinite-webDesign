@@ -4,7 +4,7 @@
         <header id="headerTab" class="flex">
             <div class="search_box flex">
                 <span class="iconfont back_icon" @click="onBack">&#xe749;</span>
-                <input type="text" placeholder="搜索关键词">
+                <input type="text" placeholder="搜索关键词" v-model="searchText">
                 <span class="iconfont back_icon" @click="onSearch">&#xe749;</span>
             </div>
         </header>
@@ -21,7 +21,7 @@
 export default {
     data() {
         return {
-
+            searchText:''
         }
 
     },
@@ -32,11 +32,13 @@ export default {
     methods: {
         onBack() {
             this.$router.back();
-
         },
         onSearch() {
             this.$router.push({
-                path: './searchbox'
+                path: './searchbox',
+                query:{
+                    text:this.searchText
+                }
             })
         }
     }

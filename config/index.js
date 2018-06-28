@@ -10,7 +10,14 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': {//这里是我配置的名字
+  　　　　target: 'http://127.0.0.1:3000/', //这个路径是我代理到本地tp框架里面
+  　　　　changeOrigin: true, //开启代理
+    　　　pathRewrite: { '^/api': '/api' }  //这里重写路径/run就代理到对应地址
+        
+        } 
+    },
 
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST
@@ -22,7 +29,7 @@ module.exports = {
 
     
     /**
-     * Source Maps
+     * Source Maps`
      */
 
     // https://webpack.js.org/configuration/devtool/#development

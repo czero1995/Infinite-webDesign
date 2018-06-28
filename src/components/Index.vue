@@ -120,7 +120,7 @@ export default {
     getData() {
       this.pagenum= this.pagenum + 1
       this.$http
-        .post(`http://127.0.0.1:3000/api/recommend/all`,{
+        .post(`api/recommend/all`,{
           pagenum:this.pagenum,
           pagesize:this.pagesize,
         })
