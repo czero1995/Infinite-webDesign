@@ -113,7 +113,8 @@ export default {
             this.$router.push({
                 path: `/detail`,
                 query: {
-                    id: id
+                    id: id,
+                    from:'index'
                 }
             });
         },

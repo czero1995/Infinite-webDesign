@@ -47,8 +47,10 @@ export default {
         },
 
         getData() {
+            var detailUrl = ''
+            this.$route.query.from=='index'?detailUrl='recommend':detailUrl='hot'
             this.$http
-                .get(`api/recommend/detail?id=${this.$route.query.id}`)
+                .get(`api/${detailUrl}/detail?id=${this.$route.query.id}`)
                 .then(res => {
                     console.log('res', res.data.data)
                     this.dataList = res.data.data.content;

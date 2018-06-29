@@ -23,9 +23,9 @@
                         <p>热门文章</p>
                     </div>
                     <div class="list_box">
-                        <div class="list_item flex" v-for="(item,index) in dataList" :key='index' @click="toDetail()">
+                        <div class="list_item flex" v-for="(item,index) in dataList" :key='index' @click="toDetail(item._id)">
                             <div class="item_title">{{item.title}}</div>
-                            <img class="item_post" :src="item.post">
+                            <img class="item_post" v-lazy="item.post">
                         </div>
                     </div>
                 </div>
@@ -81,9 +81,12 @@ export default {
         });
     },
     methods: {
-        toDetail() {
+        toDetail(id) {
             this.$router.push({
-                path: '/detail'
+                path: '/detail',
+                query:{
+                    id:id
+                }
             })
         },
         toTop() {

@@ -36,10 +36,13 @@ export default {
 
     methods: {
         getData() {
+            console.log('this.$route.params.text',this.$route.query.text)
             this.$http
-                .get(`api/recommend/search`)
+                .post(`api/recommend/search`,{
+                    text: this.$route.query.text
+                })
                 .then(res => {
-                    // this.dataList = [...this.dataList, ...res.data.data];
+                    this.dataList = res.data.data;
                     console.log(res);
                 })
                 .catch(function (error) {
@@ -60,4 +63,7 @@ export default {
 
 <style lang="less" scoped>
 @import '../../../static/less/variable.less';
+.list_item{
+    border-bottom: 1px solid #ccc;
+}
 </style>
