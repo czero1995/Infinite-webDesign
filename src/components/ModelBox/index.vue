@@ -104,18 +104,19 @@ export default {
   margin: auto;
   background: white;
   text-align: center;
-  width: 300px;
-  height: 152px;
+  width:6rem;
+  height: 3rem;
 }
 
 .global_model_title {
-  font-size: 20px;
-  padding-top: 10px;
+  font-size: .4rem;
+  padding-top: .2rem;
   padding-bottom: 20px;
 }
 
 .global_model_content {
-  font-size: 16px;
+  font-size: .32rem;
+  margin-top: .2rem;
 }
 
 .global_model_btn {
@@ -124,11 +125,10 @@ export default {
 }
 
 .global_model_btn div {
-  height: 50px;
-  line-height: 50px;
+  line-height: .8rem;
   flex: 1;
-  margin-top: 30px;
-  font-size: 15px;
+  margin-top: .6rem;
+  font-size: .3rem;
   border-top: 1px solid #ccc;
 }
 

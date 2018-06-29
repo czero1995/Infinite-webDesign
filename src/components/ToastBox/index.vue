@@ -25,7 +25,7 @@ export default {
             this.isShowToastBox = true
             setTimeout(() => {
                 this.isShowToastBox = false
-            }, 1200)
+            }, 2000)
         }
     }
 };
@@ -34,7 +34,7 @@ export default {
 <style scoped>
 .toast-box {
   position: absolute;
-  bottom: 60px;
+  bottom: 1rem;
   left: 0;
   right: 0;
   margin: auto;
@@ -45,11 +45,11 @@ export default {
 .toast-box p {
   display: inline-block;
   background: #666;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius: 15px;
-  height: 30px;
+  padding-left: .3rem;
+  padding-right: .3rem;
+  border-radius: .2rem;
+  line-height: .6rem;
   color: #fff;
-  line-height: 30px;
 }
+
 </style>

@@ -116,6 +116,7 @@ export default {
   input {
     flex: 1;
     border: none;
+    border-radius: 0;
     border-bottom: 1px solid #ccc;
     font-size: 0.28rem;
     padding-left: 0.2rem;
