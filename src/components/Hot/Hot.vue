@@ -113,7 +113,7 @@ export default {
     },
     getData() {
       this.$http
-        .get(`api/hot/all`)
+        .get(`${this.$baseURL}/hot/all`)
         .then(res => {
           this.dataList = res.data.data;
         })
@@ -123,7 +123,7 @@ export default {
     },
     getBanner() {
       this.$http
-        .get(`api/hot/banner`)
+        .get(`${this.$baseURL}/hot/banner`)
         .then(res => {
           this.bannerList = res.data.data;
         })
