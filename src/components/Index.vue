@@ -118,7 +118,7 @@ export default {
       this.pagenum = this.pagenum + 1;
       this.$http
         // .post(`api/recommend/all`, {
-        .post(`http://localhost:3000/recommend/all`, {
+        .post(`http://localhost:3000/api/recommend/all`, {
           pagenum: this.pagenum,
           pagesize: this.pagesize
         })
