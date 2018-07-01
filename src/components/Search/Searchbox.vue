@@ -2,68 +2,82 @@
 
     <div class="page">
         <headersec tabname="搜索详情"></headersec>
-        <div class="container" v-if="dataList.length != 0">
-            <div class="list_box">
-                <div class="list_item flex" v-for="(item,index) in dataList" :key='index' @click="toDetail(item._id)">
-                    <div class="item_title">{{item.title}}</div>
-                    <img class="item_post" v-lazy="item.post">
+        <transition :name="slidename" v-show="mainarea">
+            <div class="container" >
+                <div class="list_box" v-if="dataList.length != 0">
+                    <div class="list_item flex" v-for="(item,index) in dataList" :key='index' @click="toDetail(item._id)">
+                        <div class="item_title">{{item.title}}</div>
+                        <img class="item_post" v-lazy="item.post">
+                    </div>
                 </div>
+                <Nopage v-else></Nopage>
             </div>
-        </div>
-        <div class="nocontainer" v-else>
-            <span>找不到对应的内容</span>
-        </div>
+            
+        </transition>
     </div>
 
 </template>
 
 <script>
-import Headersec from '../base/HeaderSec.vue';
+import Headersec from "../base/HeaderSec.vue";
+import Nopage from "../base/NoPage";
+import { mapGetters, mapMutations } from "vuex";
 export default {
-    data() {
-        return {
-            dataList: [
-            ],
-        };
+  data() {
+    return {
+      dataList: [],
+      mainarea: false,
+      slidename: "slide-up"
+    };
+  },
+  components: {
+    Headersec,
+    Nopage
+  },
+  computed: {
+    ...mapGetters(["this.$store.state.searchid"])
+  },
+  mounted() {},
+  activated() {
+    this.getData();
+    this.setSearchid(this.$route.query.text);
+    this.mainarea = true;
+  },
+  deactivated() {
+    this.mainarea = false;
+  },
+  methods: {
+    getData() {
+      console.log("this.$route.params.text", this.$route.query.text);
+      this.$http
+        .post(`api/recommend/search`, {
+          text: this.$route.query.text
+        })
+        .then(res => {
+          this.dataList = res.data.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
-    components: {
-        Headersec
+    toDetail(id) {
+      this.$router.push({
+        path: `/detail`,
+        query: {
+          id: id
+        }
+      });
     },
-
-    mounted() {
-        this.getData()
-    },
-
-    methods: {
-        getData() {
-            console.log('this.$route.params.text',this.$route.query.text)
-            this.$http
-                .post(`api/recommend/search`,{
-                    text: this.$route.query.text
-                })
-                .then(res => {
-                    this.dataList = res.data.data;
-                    console.log(res);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-        toDetail(id) {
-            this.$router.push({
-                path: `/detail`,
-                query: {
-                    id: id
-                }
-            });
-        },
-    }
+    ...mapMutations({
+      setSearchid: "SET_SEARCHID"
+    })
+  }
 };
 </script>
 
 <style lang="less" scoped>
-@import '../../../static/less/variable.less';
-.list_item{
-    border-bottom: 1px solid #ccc;
+@import "../../../static/less/variable.less";
+.list_item {
+  border-bottom: 1px solid #ccc;
 }
 </style>

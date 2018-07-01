@@ -7,7 +7,8 @@
                 <input type="text" placeholder="搜索关键词">
             </router-link>
         </header>
-        <div class="container wrapper" ref="wrapper">
+    <transition :name="slidename">
+        <div class="container wrapper" ref="wrapper" v-show="mainarea">
             <div class="content" ref="content">
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
@@ -31,96 +32,112 @@
                 </div>
             </div>
         </div>
-
+    </transition>
         <footers :urlRouter="$route.path" ref="footer"></footers>
     </div>
 
 </template>
 
 <script>
-
 import Footers from "../base/Footer.vue";
 import "../../../static/css/swiper.min.css";
 import { mapGetters, mapMutations } from "vuex";
 import BScroll from "better-scroll";
 import Swiper from "../../../static/js/swiper.min";
+var lastRouter = "";
 export default {
-    data() {
-        return {
-            slidename: "slide-back",
-            dataList: [],
-            bannerList: [],
-        };
+  data() {
+    return {
+      mainarea: false,
+      slidename: "slide-back",
+      dataList: [],
+      bannerList: []
+    };
+  },
+  components: {
+    Footers
+  },
+  computed: {
+    ...mapGetters(["this.$store.state.comname"])
+  },
+  mounted() {
+    this.getData();
+    this.getBanner();
+    setTimeout(() => {
+      const swiper = new Swiper(".swiper-container", {
+        pagination: ".swiper-pagination",
+        paginationClickable: true,
+        spaceBetween: 0,
+        autoplay: 2000
+      });
+    }, 200);
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        click: true,
+        mouseWheel: {
+          speed: 200,
+          invert: false,
+          easeTime: 30
+        }
+      });
+    });
+  },
+  activated() {
+    this.mainarea = true;
+    /*判断动画是进还是出*/
+    if (lastRouter == "/index") {
+      this.slidename = "slide-go";
+    } else {
+      this.slidename = "slide-back";
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    lastRouter = from.path;
+    next();
+  },
+
+  deactivated() {
+    this.mainarea = false;
+  },
+  methods: {
+    toDetail(id) {
+      this.$router.push({
+        path: "/detail",
+        query: {
+          id: id
+        }
+      });
     },
-    components: {
-        Footers
+    toTop() {
+      this.scroll.scrollTo(0, 0, 1000, "swipeBounce");
     },
-    computed: {
-        ...mapGetters(["this.$store.state.carts", "this.$store.state.comname"])
-    },
-    mounted() {
-        this.getData()
-        this.getBanner()
-        setTimeout(() => {
-            const swiper = new Swiper(".swiper-container", {
-                pagination: ".swiper-pagination",
-                paginationClickable: true,
-                spaceBetween: 0,
-                autoplay: 2000,
-            });
-        }, 200)
-        this.$nextTick(() => {
-            this.scroll = new BScroll(this.$refs.wrapper, {
-                click: true,
-                mouseWheel: {
-                    speed: 200,
-                    invert: false,
-                    easeTime: 30
-                }
-            });
+    getData() {
+      this.$http
+        .get(`api/hot/all`)
+        .then(res => {
+          this.dataList = res.data.data;
+        })
+        .catch(function(error) {
+          console.log(error);
         });
     },
-    methods: {
-        toDetail(id) {
-            this.$router.push({
-                path: '/detail',
-                query:{
-                    id:id
-                }
-            })
-        },
-        toTop() {
-            this.scroll.scrollTo(0, 0, 1000, "swipeBounce");
-        },
-        getData() {
-            this.$http
-                .get(`api/hot/all`)
-                .then(res => {
-                    this.dataList = res.data.data
-                    console.log(this.dataList);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-        getBanner() {
-            this.$http
-                .get(`api/hot/banner`)
-                .then(res => {
-                    this.bannerList = res.data.data
-                    console.log(this.bannerList);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-        ...mapMutations({})
-    }
+    getBanner() {
+      this.$http
+        .get(`api/hot/banner`)
+        .then(res => {
+          this.bannerList = res.data.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    ...mapMutations({})
+  }
 };
 </script>
 
 <style lang="less" scoped>
-@import '../../../static/less/variable.less';
+@import "../../../static/less/variable.less";
 .page {
   background: #efefef;
 }

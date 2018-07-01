@@ -1,5 +1,5 @@
 {
-  "name": "fancy",
+  "name": "Infinite",
   "version": "1.0.0",
   "description": "a little store",
   "author": "rick",
@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
     "better-scroll": "^1.11.1",
     "vconsole": "^3.2.0",
     "vue": "^2.5.2",

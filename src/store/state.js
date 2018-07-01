@@ -1,7 +1,9 @@
 const state = {
-  comname: 'index', //默认组件名字
-  ordercur: 1, //默认订单下标
   history: [], // 搜索记录
-  isLogin: false // 登录状态
+  login: false, // 登录状态
+  userinfo: {}, // 用户信息
+  detailid: '', // 详情id,
+  searchid: '', // 搜索关键词,
+  comname: 'index', //默认组件名字
 }
 export default state

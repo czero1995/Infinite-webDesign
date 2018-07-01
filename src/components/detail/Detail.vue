@@ -1,71 +1,96 @@
 <template>
 
     <div class="page">
+        
         <headersec tabname="内容详情"></headersec>
-        <div class="container wrapper" ref="wrapper">
+        <transition :name="slidename">
+        <div class="container " ref="wrapper" v-show="mainarea">
             <div class="content" ref="content">
                 <div v-html="dataList">
                 </div>
             </div>
         </div>
-        <span class="iconfont collect_icon" :class="{'iscollect':dataList.collect}" @click="onCollect">&#xe605;</span>
+        </transition>
     </div>
 
 </template>
 
 <script>
-import Headersec from '../base/HeaderSec.vue';
+import Headersec from "../base/HeaderSec.vue";
 import BScroll from "better-scroll";
+import { mapGetters, mapMutations } from "vuex";
 export default {
-    data() {
-        return {
-            switchHeader: false,
-            switchFooter: false,
-            dataList: {}
-        }
+  data() {
+    return {
+      switchHeader: false,
+      switchFooter: false,
+      dataList: {},
+      mainarea: false,
+      slidename: "slide-go"
+    };
+  },
+  components: {
+    Headersec
+  },
+  computed: {
+    ...mapGetters(["this.$store.state.login"])
+  },
+  mounted() {
+    // this.$nextTick(() => {
+    //   this.scroll = new BScroll(this.$refs.wrapper, {
+    //     click: true,
+    //     mouseWheel: {
+    //       speed: 20,
+    //       invert: false,
+    //       easeTime: 300
+    //     }
+    //   });
+    // });
+  },
+  activated() {
+    this.mainarea = true;
+    this.getData();
+    this.setDetailid(this.$route.query.id);
+  },
+  deactivated() {
+    this.mainarea = false;
+  },
+  methods: {
+    onCollect() {
+      this.dataList.collect = true;
     },
-    components: {
-        Headersec,
-    },
-    mounted() {
-        this.$nextTick(() => {
-            this.scroll = new BScroll(this.$refs.wrapper, {
-                click: true,
-                mouseWheel: {
-                    speed: 20,
-                    invert: false,
-                    easeTime: 300
-                }
-            });
-        });
-        this.getData()
-    },
-    methods: {
-        onCollect() {
-            console.log('aaa')
-            this.dataList.collect = true
-        },
 
-        getData() {
-            var detailUrl = ''
-            this.$route.query.from=='index'?detailUrl='recommend':detailUrl='hot'
-            this.$http
-                .get(`api/${detailUrl}/detail?id=${this.$route.query.id}`)
-                .then(res => {
-                    console.log('res', res.data.data)
-                    this.dataList = res.data.data.content;
-                    console.log(111, this.dataList);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-    }
-}
+    getData() {
+      var detailUrl = "";
+      this.$route.query.from == "index"
+        ? (detailUrl = "recommend")
+        : (detailUrl = "hot");
+      this.$http
+        .get(`api/${detailUrl}/detail?id=${this.$route.query.id}`)
+        .then(res => {
+          console.log(res.data.data.content);
+          var str = res.data.data.content.replace("&lt;!DOCTYPE html&gt;", "");
+          str = str.replace("&lt;html&gt;", "");
+          str = str.replace("&lt;head&gt;", "");
+          str = str.replace("&lt;/head&gt;", "");
+          str = str.replace("&lt;body&gt;", "");
+          str = str.replace("&lt;/body&gt;", "");
+          str = str.replace("&lt;/html&gt;", "");
+          this.dataList = str;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    ...mapMutations({
+      setDetailid: "SET_DETAILID"
+    })
+  }
+};
 </script>
 
 <style lang="less" scoped>
-@import '../../../static/less/variable.less';
+@import "../../../static/less/variable.less";
 .wrapper {
   height: 100vh;
   padding-top: 0.3rem;
@@ -91,6 +116,7 @@ export default {
 }
 .content {
   padding: 0.6rem 0.4rem;
+  margin-top: 0.4rem;
 }
 .bottom {
   line-height: 0.8rem;
@@ -98,16 +124,5 @@ export default {
   background: @theme_background;
   font-size: 0.32rem;
   color: white;
-}
-.iconfont {
-  font-size: 0.54rem;
-}
-.collect_icon {
-  position: absolute;
-  right: 0.3rem;
-  bottom: 1rem;
-}
-.iscollect {
-  color: @theme_background;
 }
 </style>

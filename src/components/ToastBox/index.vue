@@ -6,28 +6,28 @@
 
 <script>
 export default {
-    props: {
-        toast: {
-            type: String,
-            default: 'toast',
-        }
-    },
-    data() {
-        return {
-            isShowToastBox: false,
-            resolve: '',
-            reject: '',
-            promise: '' // 保存promise对象
-        };
-    },
-    methods: {
-        showToastBox() {
-            this.isShowToastBox = true
-            setTimeout(() => {
-                this.isShowToastBox = false
-            }, 2000)
-        }
+  props: {
+    toast: {
+      type: String,
+      default: "toast"
     }
+  },
+  data() {
+    return {
+      isShowToastBox: false,
+      resolve: "",
+      reject: "",
+      promise: "" // 保存promise对象
+    };
+  },
+  methods: {
+    showToastBox() {
+      this.isShowToastBox = true;
+      setTimeout(() => {
+        this.isShowToastBox = false;
+      }, 2000);
+    }
+  }
 };
 </script>
 
@@ -45,11 +45,10 @@ export default {
 .toast-box p {
   display: inline-block;
   background: #666;
-  padding-left: .3rem;
-  padding-right: .3rem;
-  border-radius: .2rem;
-  line-height: .6rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  border-radius: 0.2rem;
+  line-height: 0.6rem;
   color: #fff;
 }
-
 </style>

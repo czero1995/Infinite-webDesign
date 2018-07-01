@@ -2,8 +2,8 @@
 
     <div class="page">
         <headersec tabname="找回密码"></headersec>
-        <div class="container">
-
+        <transition :name="slidename" >
+        <div class="container" v-show="mainarea">
             <div class="login_item flex">
                 <span>手机号:</span>
                 <input type="text" placeholder="输入用户名" v-model="phoneNumber">
@@ -20,78 +20,84 @@
                 确认
             </div>
             <div class="noacount" @click="onBack">
-                没有账号?前往注册!
+                前往登录!
             </div>
         </div>
+        </transition>
     </div>
 </template>
 
 <script>
-import Headersec from '../base/HeaderSec.vue';
-import * as common from '../../mixins/common.js'
+import Headersec from "../base/HeaderSec.vue";
+import * as common from "../../../static/js/common.js";
 export default {
-    data() {
-        return {
-            phoneNumber: '',
-            passwd: '',
-            rePasswd: ''
-        }
-    },
-    components: {
-        Headersec,
-    },
-    mounted() {
-
-    },
-    methods: {
-        onUpdate() {
-            if (!common.phoneReg.test(this.phoneNumber)) {
-                this.$toastBox.showToastBox({
-                    toast: '请输入正确手机号码',
-                })
-            } else if (this.passwd == '') {
-                this.$toastBox.showToastBox({
-                    toast: '请输入密码',
-                })
-            } else if (this.passwd != this.rePasswd) {
-                this.$toastBox.showToastBox({
-                    toast: '两次输入密码不一致',
-                })
+  data() {
+    return {
+      phoneNumber: "",
+      passwd: "",
+      rePasswd: "",
+      mainarea: false,
+      slidename: "slide-up"
+    };
+  },
+  components: {
+    Headersec
+  },
+  mounted() {},
+  activated() {
+    this.mainarea = true;
+  },
+  deactivated() {
+    this.mainarea = false;
+  },
+  methods: {
+    onUpdate() {
+      if (!common.phoneReg.test(this.phoneNumber)) {
+        this.$toastBox.showToastBox({
+          toast: "请输入正确手机号码"
+        });
+      } else if (this.passwd == "") {
+        this.$toastBox.showToastBox({
+          toast: "请输入密码"
+        });
+      } else if (this.passwd != this.rePasswd) {
+        this.$toastBox.showToastBox({
+          toast: "两次输入密码不一致"
+        });
+      } else {
+        this.$http
+          .post(`api/update`, {
+            phoneNumber: this.phoneNumber,
+            passwd: this.passwd
+          })
+          .then(res => {
+            if (res.data.success) {
+              this.$toastBox.showToastBox({
+                toast: "修改成功"
+              });
+              setTimeout(() => {
+                this.onBack();
+              }, 1000);
             } else {
-                this.$http
-                    .post(`api/update`, {
-                        phoneNumber: this.phoneNumber,
-                        passwd: this.passwd,
-                    })
-                    .then(res => {
-                        console.log(res)
-                        if (res.data.data.success) {
-                            this.$toastBox.showToastBox({
-                                toast: '修改成功',
-                            })
-                            setTimeout(() => {
-                                this.onBack()
-                            }, 2000)
-                        } else {
-                            this.$toastBox.showToastBox({
-                                toast: '用户不存在!',
-                            })
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+              this.$toastBox.showToastBox({
+                toast: "用户不存在!"
+              });
             }
-        },
-        onBack() {
-            this.$router.go(-1)
-        }
+          })
+          .catch(function(error) {
+            console.log("error", error);
+          });
+      }
+    },
+    onBack() {
+      this.$router.go(-1);
     }
-}
+  }
+};
 </script>
 
 <style lang="less" scoped>
-@import '../../../static/less/variable.less';
+@import "../../../static/less/variable.less";
 .container {
   padding: 1rem;
   margin-top: 1.6rem;

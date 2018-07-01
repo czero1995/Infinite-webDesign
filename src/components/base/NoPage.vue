@@ -6,21 +6,22 @@
 </template>
 
 <style lang="less" scoped>
-	div {
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		font-size: .28rem;
-	}
+div {
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.28rem;
+}
 
-	img {
-		text-align: center;
-		margin: .3rem 0;
-		width: 2rem;
-		height: 2rem;
-	}
+img {
+  text-align: center;
+  margin: 0.3rem 0;
+  width: 2rem;
+  height: 2rem;
+}
 
-	p {
-		text-align: center;
-	}
+p {
+  text-align: center;
+}
 </style>

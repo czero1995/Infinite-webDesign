@@ -1,20 +1,24 @@
 <template>
-
     <div class="page recommend">
-        <div class="top_tab">Infinite</div>
-        <div class="container wrapper" ref="wrapper">
+        
+        <div class="container wrapper" ref="wrapper" >
             <div class="content" ref="content">
                 <div class="pull_down">{{pullDownText}}</div>
-                <div class="pull_up">{{pullUpText}}</div>
-
-                <div class="list_box">
-                    <div class="list_item flex" v-for="(item,index) in dataList" :key='index' @click="toDetail(item._id)">
-                        <div class="item_title">{{item.title}}</div>
-                        <img class="item_post" v-lazy="item.post">
+                    <div class="list_box">
+                        <div class="top_tab">Infinite</div>
+                        <transition :name="slidename">
+                            <div v-show="mainarea">
+                                <div class="list_item flex" v-for="(item,index) in dataList" :key='index' @click="toDetail(item._id)" >
+                                    <div class="item_title">{{item.title}}</div>
+                                    <img class="item_post" v-lazy="item.post">
+                                </div>
+                            </div>
+                        </transition>
                     </div>
-                </div>
+               
             </div>
         </div>
+         
         <div class="scroll-top" v-show="scrollTopView" @click="toTop">
             <span class="iconfont icon-totop">&#xe71f;</span>
         </div>
@@ -25,190 +29,118 @@
 
 <script>
 import Footers from "./base/Footer.vue";
-import Message from "./base/Message.vue";
 import { mapGetters, mapMutations } from "vuex";
 import BScroll from "better-scroll";
-var startX, startY;
 export default {
-    data() {
-        return {
-            pagenum: 0,
-            pagesize: 8,
-            dataList: [
-            ],
-            slidename: "slide-back",
-            scrollTopView: false,
-            pullDownText: "下拉刷新",
-            pullUpText: "正在加载",
-            scrollY: 0
-        };
-    },
-    components: {
-        Footers
-    },
-    computed: {
-        ...mapGetters(["this.$store.state.carts", "this.$store.state.comname"])
-    },
-    watch: {},
-    mounted() {
-        this.getData();
-        this.$nextTick(() => {
-            this.scroll = new BScroll(this.$refs.wrapper, {
-                click: true,
-                pullUpLoad: {
-                    // 配置上啦加载
-                    threshold: -100 //上啦80px的时候加载
-                },
-                pullDownRefresh: {
-                    threshold: 80,
-                    stop: 20
-                },
-                mouseWheel: {
-                    speed: 20,
-                    invert: false,
-                    easeTime: 30
-                }
-            });
-            this.scroll.on("pullingUp", () => {
-                console.log("上啦加载");
-                this.getData()
-                this.scroll.finishPullUp();
-            });
-            this.scroll.on("pullingDown", res => {
-                console.log("下拉刷新");
-                this.pagenum = 0;
-                this.dataList = [];
-                this.getData()
-                this.scroll.finishPullDown();
-            });
-            this.scroll.on("scroll", pos => {
-                // console.log(pos.y)
-                this.scrollY = pos.y;
-                if (pos.y > 80) {
-                    this.pullDownText = "释放刷新";
-                } else {
-                    this.pullDownText = "下拉刷新";
-                }
-                if (pos.y < -120) {
-                    this.scrollTopView = true;
-                } else {
-                    this.scrollTopView = false;
-                }
-            });
+  data() {
+    return {
+      pagenum: 0,
+      pagesize: 8,
+      dataList: [],
+      scrollTopView: false,
+      pullDownText: "下拉刷新",
+      slidename: "slide-back",
+      mainarea: false,
+      loadingTitle: "正在加载下一页"
+    };
+  },
+  components: {
+    Footers
+  },
+  computed: {
+    ...mapGetters(["this.$store.state.carts", "this.$store.state.comname"])
+  },
+  watch: {},
+  activated() {
+    this.mainarea = true;
+  },
+  deactivated() {
+    this.mainarea = false;
+  },
+  mounted() {
+    this.getData();
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        click: true,
+        pullUpLoad: {
+          // 配置上啦加载
+          threshold: 0
+        },
+        pullDownRefresh: {
+          threshold: 80,
+          stop: 20
+        },
+        mouseWheel: {
+          speed: 20,
+          invert: false,
+          easeTime: 30
+        }
+      });
+      this.scroll.on("pullingUp", () => {
+        this.$toastBox.showToastBox({
+          toast: this.loadingTitle
         });
-
-        document.addEventListener("touchstart", this.touchStart, false);
-        document.addEventListener("touchend", this.touchEnd, false);
+        this.getData();
+        this.scroll.finishPullUp();
+      });
+      this.scroll.on("pullingDown", res => {
+        this.pagenum = 0;
+        this.dataList = [];
+        this.getData();
+        this.scroll.finishPullDown();
+      });
+      this.scroll.on("scroll", pos => {
+        this.scrollY = pos.y;
+        if (pos.y > 80) {
+          this.pullDownText = "释放刷新";
+        } else {
+          this.pullDownText = "下拉刷新";
+        }
+        if (pos.y < -120) {
+          this.scrollTopView = true;
+        } else {
+          this.scrollTopView = false;
+        }
+      });
+    });
+  },
+  methods: {
+    toDetail(id) {
+      this.$router.push({
+        path: `/detail`,
+        query: {
+          id: id,
+          from: "index"
+        }
+      });
     },
-    destroyed() {
-        console.log("组件销毁");
-        document.removeEventListener("touchstart", this.touchStart, false);
-        document.removeEventListener("touchend", this.touchEnd, false);
+    getData() {
+      this.pagenum = this.pagenum + 1;
+      this.$http
+        .post(`api/recommend/all`, {
+          pagenum: this.pagenum,
+          pagesize: this.pagesize
+        })
+        .then(res => {
+          if (res.data.data.length == 0) {
+            this.loadingTitle = "没有更多的数据了";
+          }
+          this.dataList = [...this.dataList, ...res.data.data];
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
-    methods: {
-        onChooice() {
-            this.showChooiceModel = !this.showChooiceModel;
-        },
-        toDetail(id) {
-            this.$router.push({
-                path: `/detail`,
-                query: {
-                    id: id,
-                    from:'index'
-                }
-            });
-        },
-        getData() {
-            this.pagenum = this.pagenum + 1
-            this.$http
-                .post(`api/recommend/all`, {
-                    pagenum: this.pagenum,
-                    pagesize: this.pagesize,
-                })
-                .then(res => {
-                    this.dataList = [...this.dataList, ...res.data.data];
-                    console.log(this.dataList);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-        toTop() {
-            this.scroll.scrollTo(0, 0, 1000, "swipeBounce");
-        },
-        GetSlideAngle(dx, dy) {
-            return Math.atan2(dy, dx) * 180 / Math.PI;
-        },
-
-        //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
-        GetSlideDirection(startX, startY, endX, endY) {
-            var dy = startY - endY;
-            var dx = endX - startX;
-            var result = 0;
-
-            //如果滑动距离太短
-            if (Math.abs(dx) < 50 && Math.abs(dy) < 50) {
-                return result;
-            }
-
-            var angle = this.GetSlideAngle(dx, dy);
-            if (angle >= -45 && angle < 45) {
-                result = 4;
-            } else if (angle >= 45 && angle < 135) {
-                result = 1;
-            } else if (angle >= -135 && angle < -45) {
-                result = 2;
-            } else if (
-                (angle >= 135 && angle <= 180) ||
-                (angle >= -180 && angle < -135)
-            ) {
-                result = 3;
-            }
-
-            return result;
-        },
-        touchStart(ev) {
-            console.log("aa");
-            startX = ev.touches[0].pageX;
-            startY = ev.touches[0].pageY;
-            console.log(startX);
-        },
-        touchEnd(ev) {
-            var endX, endY;
-            endX = ev.changedTouches[0].pageX;
-            endY = ev.changedTouches[0].pageY;
-            var direction = this.GetSlideDirection(startX, startY, endX, endY);
-            switch (direction) {
-                case 0:
-                    break;
-                case 1:
-                    if (this.scrollY < -80) {
-                        // that.headerView = false
-                    }
-                    console.log("向上");
-                    break;
-                case 2:
-                    if (this.scrollY < -80) {
-                        // that.headerView = true
-                    }
-                    console.log("向下");
-                    break;
-                case 3:
-                    console.log("向左");
-                    break;
-                case 4:
-                    console.log("向右");
-                    break;
-                default:
-            }
-        },
-        ...mapMutations({})
-    }
+    toTop() {
+      this.scroll.scrollTo(0, 0, 1000, "swipeBounce");
+    },
+    ...mapMutations({})
+  }
 };
 </script>
 
 <style lang="less" scoped>
-@import '../../static/less/variable.less';
+@import "../../static/less/variable.less";
 .pull_down {
   position: absolute;
   top: -0.66rem;
@@ -237,7 +169,6 @@ export default {
   background: @theme_color;
   text-align: center;
   color: white;
-  position: fixed;
   z-index: 1;
   left: 0;
   right: 0;
@@ -246,7 +177,10 @@ export default {
 .recommend {
   background: #efefef;
 }
-
+.list_box {
+  padding-top: 0;
+  height: 100%;
+}
 .swiper-wrapper {
   position: relative;
 }

@@ -9,15 +9,15 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '',
     proxyTable: {
       '/api': {
-//   　　　　target: 'http://127.0.0.1:3000/', 
-  　　　　target: 'http://47.98.240.154:3000/', 
-  　　　　changeOrigin: true,
-    　　　pathRewrite: { '^/api': '/api' }  
-        
-        } 
+        // 　　　　target: 'http://127.0.0.1:3000/', 
+        target: 'http://infinite.czero.cn:3000/',
+        changeOrigin: true,
+        pathRewrite: { '^/api': '/api' }
+
+      }
     },
 
     // Various Dev Server settings
@@ -28,7 +28,7 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
+
     /**
      * Source Maps`
      */

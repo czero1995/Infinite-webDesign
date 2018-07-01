@@ -15,69 +15,67 @@
 
 <script>
 export default {
-    props: {
-        title: {
-            title: String,
-            default: '提示'
-        },
-        content: {
-            type: String,
-            default: '这是弹框内容'
-        },
-        confirmBtn: {
-            type: Boolean,
-            default: true,
-        },
-        cancelBtn: {
-            type: Boolean,
-            default: false
-        }
+  props: {
+    title: {
+      title: String,
+      default: "提示"
     },
-    data() {
-        return {
-            showModelBox: false,
-            resolve: '',
-            reject: '',
-            promise: '' // 保存promise对象
-        }
+    content: {
+      type: String,
+      default: "这是弹框内容"
     },
-    methods: {
-        // 确定，将promise断定为resolve状态
-        confirm() {
-            this.showModelBox = false
-            this.resolve('confirm');
-            this.remove()
-        },
-        // 取消， 将promise断定为reject状态
-        cancel() {
-            this.showModelBox = false
-            this.reject('cancel');
-            this.remove()
-        },
-        // 弹出modelBox，并创建promise对象
-        onModelBox() {
-            this.showModelBox = true;
-            this.promise = new Promise((resolve, reject) => {
-                this.resolve = resolve;
-                this.reject = reject;
-            });
-            // 返回promise对象
-            return this.promise;
-        },
-
-        remove() {
-            setTimeout(() => {
-                this.destroy();
-            }, 300)
-        },
-
-        destroy() {
-            this.$destroy();
-            document.body.removeChild(this.$el)
-        }
+    confirmBtn: {
+      type: Boolean,
+      default: true
+    },
+    cancelBtn: {
+      type: Boolean,
+      default: false
     }
+  },
+  data() {
+    return {
+      showModelBox: false,
+      resolve: "",
+      reject: "",
+      promise: "" // 保存promise对象
+    };
+  },
+  methods: {
+    // 确定，将promise断定为resolve状态
+    confirm() {
+      this.showModelBox = false;
+      this.resolve("confirm");
+      this.remove();
+    },
+    // 取消， 将promise断定为reject状态
+    cancel() {
+      this.showModelBox = false;
+      this.reject("cancel");
+      this.remove();
+    },
+    // 弹出modelBox，并创建promise对象
+    onModelBox() {
+      this.showModelBox = true;
+      this.promise = new Promise((resolve, reject) => {
+        this.resolve = resolve;
+        this.reject = reject;
+      });
+      // 返回promise对象
+      return this.promise;
+    },
 
+    remove() {
+      setTimeout(() => {
+        this.destroy();
+      }, 300);
+    },
 
+    destroy() {
+      this.$destroy();
+      document.body.removeChild(this.$el);
+    }
+  }
 };
 </script>
 <style scoped>
@@ -104,19 +102,19 @@ export default {
   margin: auto;
   background: white;
   text-align: center;
-  width:6rem;
+  width: 6rem;
   height: 3rem;
 }
 
 .global_model_title {
-  font-size: .4rem;
-  padding-top: .2rem;
+  font-size: 0.4rem;
+  padding-top: 0.2rem;
   padding-bottom: 20px;
 }
 
 .global_model_content {
-  font-size: .32rem;
-  margin-top: .2rem;
+  font-size: 0.32rem;
+  margin-top: 0.2rem;
 }
 
 .global_model_btn {
@@ -125,10 +123,10 @@ export default {
 }
 
 .global_model_btn div {
-  line-height: .8rem;
+  line-height: 0.8rem;
   flex: 1;
-  margin-top: .6rem;
-  font-size: .3rem;
+  margin-top: 0.6rem;
+  font-size: 0.3rem;
   border-top: 1px solid #ccc;
 }
 
