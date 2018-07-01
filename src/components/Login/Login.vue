@@ -72,7 +72,7 @@ export default {
         });
       } else {
         this.$http
-          .post(`api/user/login`, {
+          .post(`${this.$baseURL}user/login`, {
             phoneNumber: this.phoneNumber,
             passwd: this.passwd
           })

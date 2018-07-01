@@ -66,7 +66,7 @@ export default {
         });
       } else {
         this.$http
-          .post(`api/update`, {
+          .post(`${this.$baseURL}update`, {
             phoneNumber: this.phoneNumber,
             passwd: this.passwd
           })

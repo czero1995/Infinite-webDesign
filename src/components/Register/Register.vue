@@ -81,7 +81,7 @@ export default {
         });
       } else {
         this.$http
-          .post(`api/signup`, {
+          .post(`${this.$baseURL}signup`, {
             phoneNumber: this.phoneNumber,
             nickname: this.nickName,
             passwd: this.passwd

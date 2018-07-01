@@ -66,7 +66,7 @@ export default {
         ? (detailUrl = "recommend")
         : (detailUrl = "hot");
       this.$http
-        .get(`api/${detailUrl}/detail?id=${this.$route.query.id}`)
+        .get(`${this.$baseURL}${detailUrl}/detail?id=${this.$route.query.id}`)
         .then(res => {
           console.log(res.data.data.content);
           var str = res.data.data.content.replace("&lt;!DOCTYPE html&gt;", "");

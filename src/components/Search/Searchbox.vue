@@ -50,7 +50,7 @@ export default {
     getData() {
       console.log("this.$route.params.text", this.$route.query.text);
       this.$http
-        .post(`api/recommend/search`, {
+        .post(`${this.$baseURL}recommend/search`, {
           text: this.$route.query.text
         })
         .then(res => {
