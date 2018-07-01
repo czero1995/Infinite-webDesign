@@ -3,7 +3,7 @@
     <div class="page">
         <header id="headerTab" class="flex header_scroll">
             <router-link to="./search" tag="div" class="search-box">
-                <span class="iconfont search-icon">&#xe600;</span>
+                <span class="iconfont search_icon">&#xe600;</span>
                 <input type="text" placeholder="搜索关键词">
             </router-link>
         </header>
@@ -12,7 +12,7 @@
             <div class="content" ref="content">
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide" v-for="(bannerItem,index) in bannerList" :key="index">
+                        <div class="swiper-slide" v-for="(bannerItem,index) in bannerList" :key="index" @click="toDetail(item._id)">
                             <img v-lazy="bannerItem.post" />
                         </div>
                     </div>
@@ -175,6 +175,9 @@ export default {
   font-size: 0.32rem;
   color: red;
   margin-right: 0.14rem;
+}
+.search_icon {
+  font-size: 0.32rem;
 }
 .list_box {
   padding-top: 0;

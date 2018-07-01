@@ -29,8 +29,11 @@ footer {
 }
 .footer-item {
   flex: 1;
+  line-height: 0.88rem;
   text-align: center;
   position: relative;
+  margin-top: 0.2rem;
+  box-sizing: border-box;
 }
 .iconfont {
   font-size: 0.6rem;

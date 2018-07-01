@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <headersec tabname="我的收藏"></headersec>
+        <headersec tabname="关于我们"></headersec>
         <transition :name="slidename">
         <Nopage v-show="mainarea"></Nopage>
         </transition>

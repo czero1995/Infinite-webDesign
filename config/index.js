@@ -9,10 +9,10 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '',
+    assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        // 　　　　target: 'http://127.0.0.1:3000/', 
+        // target: 'http://127.0.0.1:3000/',
         target: 'http://infinite.czero.cn:3000/',
         changeOrigin: true,
         pathRewrite: { '^/api': '/api' }
