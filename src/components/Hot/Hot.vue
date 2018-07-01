@@ -178,6 +178,9 @@ export default {
 }
 .search_icon {
   font-size: 0.32rem;
+  position: absolute;
+  left: 0.3rem;
+  color: #666;
 }
 .list_box {
   padding-top: 0;

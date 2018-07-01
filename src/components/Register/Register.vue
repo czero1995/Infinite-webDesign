@@ -20,12 +20,13 @@
                 <span>确认密码:</span>
                 <input type="password" placeholder="输入确定密码" v-model="rePasswd">
             </div>
-            <div class="login_btn" @click="onRegister">
-                注册
-            </div>
             <div class="noacount" @click="toLogin">
                 已账号?前往登陆!
             </div>
+            <div class="login_btn" @click="onRegister">
+                注册
+            </div>
+            
         </div>
         </transition>
     </div>
@@ -115,7 +116,7 @@ export default {
 @import "../../../static/less/variable.less";
 .container {
   padding: 1rem;
-  margin-top: 1.6rem;
+  margin-top: 1rem;
 }
 .login_item {
   box-sizing: border-box;
@@ -143,13 +144,8 @@ export default {
   margin-top: 1.6rem;
 }
 .noacount {
-  position: absolute;
-  bottom: 1rem;
-  text-align: center;
-  right: 0;
-  left: 0;
+  text-align: left;
   color: #666;
-  margin: auto;
   font-size: 0.24rem;
 }
 </style>

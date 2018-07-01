@@ -16,12 +16,13 @@
                 <span>确认密码:</span>
                 <input type="text" placeholder="输入确认密码" v-model="rePasswd">
             </div>
-            <div class="login_btn" @click="onUpdate">
-                确认
-            </div>
             <div class="noacount" @click="onBack">
                 前往登录!
             </div>
+            <div class="login_btn" @click="onUpdate">
+                确认
+            </div>
+            
         </div>
         </transition>
     </div>
@@ -128,13 +129,8 @@ export default {
   margin-top: 1.6rem;
 }
 .noacount {
-  position: absolute;
-  bottom: 1rem;
-  text-align: center;
-  right: 0;
-  left: 0;
+  text-align: right;
   color: #666;
-  margin: auto;
   font-size: 0.24rem;
 }
 </style>

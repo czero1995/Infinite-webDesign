@@ -12,15 +12,19 @@
                     <span>密码:</span>
                     <input type="password" placeholder="输入登录密码" v-model="passwd">
                 </div>
-                <router-link class="forget_passwd" tag="div" to="./forgetpasswd">
+                <div class="flex_between">
+                  <router-link class="noacount" tag="div" to="./register">
+                    前往注册!
+                  </router-link>
+                  <router-link class="forget_passwd" tag="div" to="./forgetpasswd">
                     忘记密码
                 </router-link>
+                </div>
+                
                 <div class="login_btn" @click="onLogin">
                     登录
                 </div>
-                <router-link class="noacount" tag="div" to="./register">
-                    没有账号?前往注册!
-                </router-link>
+                
             </div>
         </transition>
     </div>
@@ -139,14 +143,9 @@ export default {
   margin-top: 1.6rem;
 }
 .noacount {
-  position: absolute;
-  bottom: 1rem;
   text-align: center;
-  right: 0;
-  left: 0;
   color: #666;
-  margin: auto;
-  font-size: 0.24rem;
+  font-size: 0.26rem;
 }
 .forget_passwd {
   text-align: right;
