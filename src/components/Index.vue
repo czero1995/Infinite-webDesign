@@ -117,7 +117,8 @@ export default {
     getData() {
       this.pagenum = this.pagenum + 1;
       this.$http
-        .post(`api/recommend/all`, {
+        // .post(`api/recommend/all`, {
+        .post(`http://infinite.czero.cn:3000/recommend/all`, {
           pagenum: this.pagenum,
           pagesize: this.pagesize
         })
