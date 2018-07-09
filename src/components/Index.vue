@@ -36,6 +36,7 @@ export default {
     return {
       pagenum: 0,
       pagesize: 8,
+      loadMore: true,
       dataList: [],
       scrollTopView: false,
       pullDownText: "下拉刷新",
@@ -80,7 +81,10 @@ export default {
         this.$toastBox.showToastBox({
           toast: this.loadingTitle
         });
-        this.getData();
+        if (this.loadMore) {
+          this.getData();
+        }
+
         this.scroll.finishPullUp();
       });
       this.scroll.on("pullingDown", res => {
@@ -115,6 +119,7 @@ export default {
       });
     },
     getData() {
+      this.loadMore = false;
       this.pagenum = this.pagenum + 1;
       this.$http
         // .post(`api/recommend/all`, {
@@ -125,6 +130,9 @@ export default {
         .then(res => {
           if (res.data.data.length == 0) {
             this.loadingTitle = "没有更多的数据了";
+            this.loadMore = false;
+          } else {
+            this.loadMore = true;
           }
           this.dataList = [...this.dataList, ...res.data.data];
         })
