@@ -42,6 +42,7 @@
 ### 前端(Vue-CLI)：
 功能:
 架构是基于[Vue全家桶购物商城](https://github.com/czero1995/fancy-store.git)
+
 1. 添加better-scroll组件实现下拉刷新和上拉加载。
 2. 请求服务端API，真实的数据交互。
 3. 添加搜索，登录，注册等功能并Vuex进行存储。
@@ -85,7 +86,91 @@
             ├── mutation-types.js   (变量存储)
             ├── mutations.js    (to修改动作)
             └── state.js    (状态仓库)
+### Vue-CLI Webpack构建优化
+#### 只黏贴关键部分的代码
+* 使用Happypack多线程打包构建
 
+在**build/webpack.base.cong.js**下添加如下代码
+
+		const HappyPack = require('happypack')
+		const os = require('os')
+		const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
+
+		 plugins: [
+		    new HappyPack({
+		      id: 'happy-babel-js',
+		      loaders: ['babel-loader?cacheDirectory=true'],
+		      threadPool: happyThreadPool,
+		    })
+		  ],
+		  
+		{
+	        test: /\.js$/,
+	        // loader: 'babel-loader',
+	        loader: 'happypack/loader?id=happy-babel-js', // 增加新的HappyPack构建loader
+	        exclude: /node_modules/,
+	        include: [resolve('src')]
+	      },
+
+* babrl-loader开启缓存
+* 
+* 启用DllPlugin和DllReferencePlugin预编译库文件
+
+
+第三方库文件单独打包一次，以后的编译都不需要在编译打包第三方库
+
+在**build/**文件夹下新建**webpack.dll.config.js**文件,复制一下代码:
+
+		const path = require("path")
+		const webpack = require("webpack")
+		
+		module.exports = {
+		    // 你想要打包的模块的数组
+		    entry: {
+		        vendor: ['vue/dist/vue.esm.js', 'axios', 'vue-router', 'vuex']
+		    },
+		    output: {
+		        path: path.join(__dirname, '../static/js'), // 打包后文件输出的位置
+		        filename: '[name].dll.js',
+		        library: '[name]_library'
+		    },
+		    plugins: [
+		        new webpack.DllPlugin({
+		            path: path.join(__dirname, '.', '[name]-manifest.json'),
+		            name: '[name]_library',
+		            context: __dirname
+		        }),
+		        // 压缩打包的文件
+		        new webpack.optimize.UglifyJsPlugin({
+		            compress: {
+		                warnings: false
+		            }
+		        })
+		    ]
+		}
+在**build/webpack.dev.config.js**和**build/webpack.prod.config.js**中添加plugins
+
+		new webpack.DllReferencePlugin({
+		      context: __dirname,
+		      manifest: require('./vendor-manifest.json')
+		}),
+		
+在**根目录下的index.html**下引入预编译的库
+
+	 	<script src="./static/js/vendor.dll.js"></script>
+
+在**package.json/scripts**下中添加dll命令
+
+    "dll": "webpack --config ./build/webpack.dll.config.js"
+    
+运行:
+
+	npm run dll
+	
+然后再
+
+	npm run dev或npm run build
+	
 ### 服务端(Node-Koa2-Mongodb-Mongoose):
 功能：
 
@@ -187,6 +272,9 @@
 	
 	# 安装依赖
 	npm install
+	
+	# DLL构建库(提高打包和编译的速度)
+	npm run dll
 	
 	# 本地开发环境 访问http://localhost:4000
 	npm run dev

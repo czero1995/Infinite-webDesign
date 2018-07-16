@@ -7,11 +7,14 @@
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js  --open",
     "start": "npm run dev",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "dll": "webpack --config ./build/webpack.dll.config.js"
   },
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.23.0",
     "better-scroll": "^1.11.1",
+    "compression-webpack-plugin": "^1.1.11",
+    "happypack": "^5.0.0",
     "vconsole": "^3.2.0",
     "vue": "^2.5.2",
     "vue-awesome-swiper": "^3.0.6",
