@@ -121,7 +121,6 @@ const webpackConfig = merge(baseWebpackConfig, {
       context: __dirname,
       manifest: require('./vendor-manifest.json')
     })
-
   ]
 })
 
