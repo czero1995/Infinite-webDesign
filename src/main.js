@@ -6,7 +6,6 @@ import store from './store'
 import axios from 'axios'
 import VueLazyLoad from 'vue-lazyload'
 import fastclick from 'fastclick'
-import Skeleton from './components/Skeleton'
 import Vconsole from 'vconsole'
 import '../static/css/iconfont.css'
 import ToastBox from './components/ToastBox/index' //全局Toast弹窗
@@ -37,6 +36,5 @@ new Vue({
   template: '<App/>',
   components: {
     App,
-    Skeleton
   }
 })
